@@ -7,16 +7,17 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO {
-	
-	//BoardDAOImpl은 내용상으로는 거의 SqlSessionTemplate을 이용해서 원하는 코드를 호출하는 수준이다. 
+
+	// BoardDAOImpl은 내용상으로는 거의 SqlSessionTemplate을 이용해서 원하는 코드를 호출하는 수준이다.
 
 	@Inject
 	private SqlSession session;
 
-	//공통으로 사용하는 XML Mapper의 namespace를 지정하고 사용한다.
+	// 공통으로 사용하는 XML Mapper의 namespace를 지정하고 사용한다.
 	private static String namespace = "org.zerock.mapper.BoardMapper";
 
 	@Override
@@ -43,6 +44,30 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public List<BoardVO> listAll() throws Exception {
 		return session.selectList(namespace + ".listAll");
+	}
+
+	@Override
+	public List<BoardVO> listPage(int page) throws Exception {
+
+		if (page <= 0) {
+			page = 1;
+		}
+
+		page = (page - 1) * 10;
+
+		return session.selectList(namespace + ".listPage", page);
+	}
+
+	@Override
+	public List<BoardVO> linstCriteria(Criteria cri) throws Exception {
+
+		return session.selectList(namespace + ".listCriteria", cri);
+	}
+
+	@Override
+	public int countPaging(Criteria cri) throws Exception {
+		return session.selectOne(namespace + ".countPaging", cri);
+
 	}
 
 }
