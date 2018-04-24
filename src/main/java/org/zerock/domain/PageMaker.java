@@ -100,7 +100,8 @@ public class PageMaker {
 
 	@Override
 	public String toString() {
-		return null;
+		return "pageMaker [totalCount" + totalCount + " startPage : " + startPage + " endPage : " + endPage + " prev : "
+				+ prev + " next : " + next + "]";
 	}
 
 }
